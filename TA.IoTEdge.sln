@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolAdapter", "Protocol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.ProtocolAdapter.ModbusTcpIP", "ProtocolAdapter\TA.ProtocolAdapter.ModbusTcpIP\TA.ProtocolAdapter.ModbusTcpIP.csproj", "{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataStorage", "DataStorage", "{75308E24-01B3-4147-BC31-8E5C6EB805B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
