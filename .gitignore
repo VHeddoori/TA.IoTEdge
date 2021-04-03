@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs/TA.IoTEdge/v16
+/.vs
+/ProtocolAdapter/TA.ProtocolAdapter.ModbusTcpIP/obj
+/TA.IoTEdgeApplication/obj
