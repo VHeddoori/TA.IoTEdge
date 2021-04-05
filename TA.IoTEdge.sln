@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.IoTEdgeApplication", "TA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolAdapter", "ProtocolAdapter", "{0AC034BD-5360-443B-920D-24E34BB17E36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.ProtocolAdapter.ModbusTcpIP", "ProtocolAdapter\TA.ProtocolAdapter.ModbusTcpIP\TA.ProtocolAdapter.ModbusTcpIP.csproj", "{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TA.ProtocolAdapter.ModbusTcpIP", "ProtocolAdapter\TA.ProtocolAdapter.ModbusTcpIP\TA.ProtocolAdapter.ModbusTcpIP.csproj", "{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataStorage", "DataStorage", "{75308E24-01B3-4147-BC31-8E5C6EB805B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{CE2E534A-CB10-41D6-966A-C4BDAAA80F5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.IoTEdge.Common", "TA.IoTEdge.Common\TA.IoTEdge.Common.csproj", "{722F9174-21C8-47B8-ABD7-9F39D398B11E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,12 +29,17 @@ Global
 		{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{722F9174-21C8-47B8-ABD7-9F39D398B11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{722F9174-21C8-47B8-ABD7-9F39D398B11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{722F9174-21C8-47B8-ABD7-9F39D398B11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{722F9174-21C8-47B8-ABD7-9F39D398B11E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E7AA8CA-27E4-49C1-B664-2BD1C9290BE2} = {0AC034BD-5360-443B-920D-24E34BB17E36}
+		{722F9174-21C8-47B8-ABD7-9F39D398B11E} = {CE2E534A-CB10-41D6-966A-C4BDAAA80F5A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66AF48FF-A46A-4B18-ABAB-6CCB297C565B}

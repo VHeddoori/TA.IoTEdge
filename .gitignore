@@ -6,3 +6,7 @@
 /.vs
 /ProtocolAdapter/TA.ProtocolAdapter.ModbusTcpIP/obj
 /TA.IoTEdgeApplication/obj
+/ProtocolAdapter/TA.ProtocolAdapter.ModbusTcpIP/bin/Debug/net5.0
+/TA.IoTEdge.Common/bin/Debug/net5.0
+/TA.IoTEdge.Common/obj
+/TA.IoTEdgeApplication/bin/Debug/netcoreapp3.1

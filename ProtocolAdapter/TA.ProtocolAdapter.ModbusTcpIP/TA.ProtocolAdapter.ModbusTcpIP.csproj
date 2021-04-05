@@ -6,9 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataType\" />
-    <Folder Include="Entities\" />
-    <Folder Include="Registers\" />
+    <PackageReference Include="NModbus" Version="3.0.62" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\TA.IoTEdge.Common\TA.IoTEdge.Common.csproj" />
   </ItemGroup>
 
 </Project>

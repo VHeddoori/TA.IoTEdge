@@ -2,7 +2,7 @@
 {
     enum DataType
     {
-        Bool,
+        Boolean,
         String,
         Float,
         Double,
