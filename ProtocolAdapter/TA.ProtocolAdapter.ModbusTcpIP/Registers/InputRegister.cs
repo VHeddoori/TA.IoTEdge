@@ -1,23 +1,36 @@
-﻿using System;
+﻿using NModbus;
+using System;
 using System.Collections.Generic;
 using TA.ProtocolAdapter.ModbusTcpIP.Entities;
 
 namespace TA.ProtocolAdapter.ModbusTcpIP.Registers
 {
-    class InputRegister : IRegister
+    class InputRegister : ModbusRegister
     {
-        public InputRegister(IEnumerable<Tag> tags)
-        {
+        private IConcurrentModbusMaster concurrentMaster;
+        private byte slaveAddress;
 
+        #region Ctor
+        public InputRegister(IConcurrentModbusMaster concurrentMaster, byte slaveAddress)
+        {
+            this.concurrentMaster = concurrentMaster;
+            this.slaveAddress = slaveAddress;
         }
-        public void Read(IEnumerable<Tag> tags)
+        #endregion
+
+        public override List<RegisterBlock> GetRegisterBlocks(IEnumerable<Tags> tags)
+        {
+            return RegisterBlock.GetBlocks(tags);
+        }
+
+        public override void ReadRegisters(IEnumerable<Tags> tags)
         {
             throw new NotImplementedException();
         }
 
-        public void Write(IEnumerable<Tag> tags)
+        public override void WriteRegisters(IEnumerable<Tags> tags)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

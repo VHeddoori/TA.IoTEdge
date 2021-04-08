@@ -3,35 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TA.ProtocolAdapter.ModbusTcpIP.Enums;
 
 namespace TA.ProtocolAdapter.ModbusTcpIP.Functions
 {
     class RegisterValue
     {
-        internal static T GetRegisterValue<T>(byte[][] byteResult, DataType dataType)
+        internal static T GetRegisterValue<T>(byte[][] byteResult, Enums.DataType dataType)
         {
             switch (dataType)
             {
-                case DataType.Boolean:
+                case Enums.DataType.Boolean:
                     return (T)(object)GetBoolValues(byteResult);
-                case DataType.String:
+                case Enums.DataType.String:
                     return (T)(object)GetStringValues(byteResult);
-                case DataType.Int16:
+                case Enums.DataType.Int16:
                     return (T)(object)GetInt16Values(byteResult);
-                case DataType.UInt16:
+                case Enums.DataType.UInt16:
                     return (T)(object)GetUInt16Values(byteResult);
-                case DataType.Int32:
+                case Enums.DataType.Int32:
                     return (T)(object)RegisterFunctions.ByteValueArraysToInts(byteResult);
-                case DataType.UInt32:
+                case Enums.DataType.UInt32:
                     return (T)(object)RegisterFunctions.ByteValueArraysToUInts(byteResult);
-                case DataType.Int64:
+                case Enums.DataType.Int64:
                     return (T)(object)GetInt64Values(byteResult);
-                case DataType.UInt64:
+                case Enums.DataType.UInt64:
                     return (T)(object)GetUInt64Values(byteResult);
-                case DataType.Float:
+                case Enums.DataType.Float:
                     return (T)(object)RegisterFunctions.ByteValueArraysToFloats(byteResult);
-                case DataType.Double:
+                case Enums.DataType.Double:
                     return (T)(object)GetDoubleValues(byteResult);
                 default:
                     throw new Exception("Invalid datatype encountered in GetRegisterValue method");

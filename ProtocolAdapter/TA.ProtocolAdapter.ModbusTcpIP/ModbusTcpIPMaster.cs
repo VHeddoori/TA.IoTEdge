@@ -1,4 +1,6 @@
 ﻿using NModbus;
+using NModbus.Device;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +14,30 @@ namespace TA.ProtocolAdapter.ModbusTcpIP
     public class ModbusTcpIPMaster
     {
         #region Data members
-        private IModbusMaster modbusMaster;
+        private readonly byte slaveAddress;
+        private readonly IConcurrentModbusMaster modbusMaster;
         private TcpClient tcpClient;
 
-        private Coils rCoils;
-        private InputStatus rInputStatus;
-        private HoldingRegister rHoldingRegister;
-        private InputRegister rInputRegister;
-
-        private Coils wCoils;
-        private InputStatus wInputStatus;
-        private HoldingRegister wHoldingRegister;
-        private InputRegister wInputRegister;
-
-        private IEnumerable<IGrouping<int, Tag>> readTags;
-        private IEnumerable<IGrouping<int, Tag>> writeTags;
+        private readonly Coils coils;
+        private readonly InputStatus inputStatus;
+        private readonly HoldingRegister holdingRegister;
+        private readonly InputRegister inputRegister;
 
         #endregion
 
         #region Ctor
-        public ModbusTcpIPMaster()
+        public ModbusTcpIPMaster(byte slaveAddress)
         {
+            this.slaveAddress = slaveAddress;
+            ModbusFactory modbusFactory = new();
+            IModbusMaster master = modbusFactory.CreateMaster(tcpClient);
+            modbusMaster = new ConcurrentModbusMaster(master, new TimeSpan());
+
+            coils = new Coils(modbusMaster, slaveAddress);
+            inputStatus = new InputStatus(modbusMaster, slaveAddress);
+            holdingRegister = new HoldingRegister(modbusMaster, slaveAddress);
+            inputRegister = new InputRegister(modbusMaster, slaveAddress);
+
         }
         #endregion
 
@@ -41,8 +46,6 @@ namespace TA.ProtocolAdapter.ModbusTcpIP
         internal void Connect(string host, int port)
         {
             tcpClient = new TcpClient(host, port);
-            ModbusFactory modbusFactory = new();
-            modbusMaster = modbusFactory.CreateMaster(tcpClient);
         }
 
         internal void Disconnect()
@@ -52,84 +55,80 @@ namespace TA.ProtocolAdapter.ModbusTcpIP
         }
 
 
-        internal void ReadRegisterSetUp(IEnumerable<Tag> tags)
+        internal Dictionary<RegisterType, List<RegisterBlock>> GetRegisterChunks(IEnumerable<Tags> tags)
         {
-            readTags = tags.OrderBy(x => x.Address).GroupBy(y => y.FunctionCode);
-            foreach (var r in readTags)
+            Dictionary<RegisterType, List<RegisterBlock>> registerTypeBlocksMap = new Dictionary<RegisterType, List<RegisterBlock>>();
+            var tagGroups = tags.GroupBy(x => x.FunctionCode);
+            foreach (var tagGroup in tagGroups)
             {
-                switch ((RegisterType)r.Key)
+                switch ((RegisterType)tagGroup.Key)
                 {
                     case RegisterType.Coils:
-                        rCoils = new Coils(r);
+                        var coilBlocks = coils.GetRegisterBlocks(tagGroup);
+                        registerTypeBlocksMap.Add(RegisterType.Coils, coilBlocks);
                         break;
                     case RegisterType.InputStatus:
-                        rInputStatus = new InputStatus(r);
+                        var inputStatusBlocks = inputStatus.GetRegisterBlocks(tagGroup);
+                        registerTypeBlocksMap.Add(RegisterType.InputStatus, inputStatusBlocks);
                         break;
                     case RegisterType.HoldingRegisters:
-                        rHoldingRegister = new HoldingRegister(r);
+                        var holdingRegisterBlocks = holdingRegister.GetRegisterBlocks(tagGroup);
+                        registerTypeBlocksMap.Add(RegisterType.HoldingRegisters, holdingRegisterBlocks);
                         break;
                     case RegisterType.InputRegisters:
-                        rInputRegister = new InputRegister(r);
+                        var inputRegisterBlocks = inputRegister.GetRegisterBlocks(tagGroup);
+                        registerTypeBlocksMap.Add(RegisterType.InputRegisters, inputRegisterBlocks);
                         break;
                     default:
-                        throw new System.Exception("Invalid function code found while data from registers");
+                        throw new InvalidOperationException("Invalid register type found while reading from modbus registers");
                 }
             }
+
+            return registerTypeBlocksMap;
+
         }
-        internal ConcurrentDictionary<int, string> ReadRegisters(IEnumerable<Tag> tags)
+
+
+        internal ConcurrentDictionary<int, string> Read(Dictionary<RegisterType, List<RegisterBlock>> registerTypeBlocksMap)
         {
+            foreach(var registerType in registerTypeBlocksMap)
+            {
+                
+                switch(registerType.Key)
+                {
+                    case RegisterType.Coils:
+                        break;
+                    case RegisterType.InputStatus:
+                        break;
+                    case RegisterType.HoldingRegisters:
+                        break;
+                    case RegisterType.InputRegisters:
+                        break;
+                }
+            }
             return null;
         }
 
-
-        internal void WriteRegisterSetUp(IEnumerable<Tag> tags)
+        internal void Write(Dictionary<RegisterType, List<RegisterBlock>> registerTypeBlocksMap)
         {
-            writeTags = tags.OrderBy(x => x.Address).GroupBy(y => y.FunctionCode);
-            foreach (var ot in writeTags)
+            foreach (var registerType in registerTypeBlocksMap)
             {
-                switch ((RegisterType)ot.Key)
+
+                switch (registerType.Key)
                 {
                     case RegisterType.Coils:
-                        wCoils.Read(ot);
                         break;
                     case RegisterType.InputStatus:
-                        rInputStatus.Read(ot);
                         break;
                     case RegisterType.HoldingRegisters:
-                        rHoldingRegister.Read(ot);
                         break;
                     case RegisterType.InputRegisters:
-                        rInputRegister.Read(ot);
                         break;
-                    default:
-                        throw new System.Exception("Invalid function code found while data from registers");
                 }
             }
         }
 
-        internal void WriteRegisters()
-        {
-            foreach (var ot in orderedTags)
-            {
-                switch ((RegisterType)ot.Key)
-                {
-                    case RegisterType.Coils:
-                        wCoils.Write(ot);
-                        break;
-                    case RegisterType.InputStatus:
-                        wInputStatus.Write(ot);
-                        break;
-                    case RegisterType.HoldingRegisters:
-                        wHoldingRegister.Write(ot);
-                        break;
-                    case RegisterType.InputRegisters:
-                        wInputRegister.Write(ot);
-                        break;
-                    default:
-                        throw new System.Exception("Invalid function code found while writing data to registers");
-                }
-            }
-        }
+
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 {
     class Modbus
     {
-        internal const ushort REGISTER_SIZE = 16;
+        internal const ushort RegisterSize = 16;
+        internal const int RegisterTypeCount = 4;
     }
 }

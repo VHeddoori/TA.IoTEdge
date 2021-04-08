@@ -6,11 +6,11 @@ namespace TA.IoTEdge.Common
     public class TelemetryData
     {
         public int ConnectionId { get; set; }
-        public IEnumerable<Tag> Tags { get; }
+        public IEnumerable<TagData> Tags { get; }
 
         public TelemetryData()
         {
-            Tags = new List<Tag>();
+            Tags = new List<TagData>();
         }
     }
 }

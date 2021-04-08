@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Timers;
 using TA.IoTEdge.Common;
 using TA.ProtocolAdapter.ModbusTcpIP.Entities;
 
 namespace TA.ProtocolAdapter.ModbusTcpIP
 {
+    /// <summary>
+    /// The ModbusTcpIPAdapter is responsible for interfacing with the IoTEdgeApplication 
+    /// and provides interfaces to read/write/poll for a modbus slave
+    /// </summary>
     class ModbusTcpIPAdapter
     {
         #region Data members
@@ -17,9 +20,9 @@ namespace TA.ProtocolAdapter.ModbusTcpIP
         #endregion
 
         #region Member functions
-        public void Connect(string connectionDetails)
+        public void Connect(string connectionJSON)
         {
-            connParams = Connection.Read(connectionDetails);
+            connParams = Connection.Deserialize(connectionJSON);
             modbusTcpIPMaster.Connect(connParams.IPAddress, connParams.Port);
         }
 
@@ -28,37 +31,41 @@ namespace TA.ProtocolAdapter.ModbusTcpIP
             modbusTcpIPMaster.Disconnect();
         }
 
-        public void ReadTags(string tagDetails)
+        public void ReadTags(string tagsJSON)
         {
-            var tags = Tag.Read(tagDetails);
+            var tags = Tags.Deserialize(tagsJSON);
+            Tags.SetRelativeAddress(tags);
 
-            modbusTcpIPMaster.ReadRegisters(tags);
+            modbusTcpIPMaster.Read(tags);
         }
 
-        public void WriteTags(string tagDetails)
+        public void WriteTags(string tagsJSON)
         {
-            var tags = Tag.Read(tagDetails);
+            var tags = Tags.Deserialize(tagsJSON);
+            Tags.SetRelativeAddress(tags);
         }
 
-        public void Poll(string tagDetails, int PollFrequencyMS = 0)
+        public void PollSlave(string tagsJSON, int PollFrequencyMS)
         {
             if (PollFrequencyMS > 0)
             {
-                var tags = Tag.Read(tagDetails);
+                var tags = Tags.Deserialize(tagsJSON);
+                Tags.SetRelativeAddress(tags);
+
                 poller = new Timer(PollFrequencyMS);
                 poller.Elapsed += (sender, e) => Poller_Elapsed(tags);
             }
         }
 
-        private void Poller_Elapsed(IEnumerable<Tag> tags)
+        private void Poller_Elapsed(IEnumerable<Tags> tags)
         {
-            modbusTcpIPMaster.ReadRegisters(tags);
+            modbusTcpIPMaster.Read(tags);
 
             // Prepare telemetry data to send
-            TelemetryData telemetryData = new TelemetryData();
+            TelemetryData telemetryData = new();
+
             OnGetRegisterValues?.Invoke(telemetryData, new EventArgs());
         }
-
         #endregion
     }
 }

@@ -7,14 +7,14 @@ namespace TA.ProtocolAdapter.ModbusTcpIP.Entities
         #region Data members
         public string IPAddress { get; set; }
         public int Port { get; set; }
-        public ushort SlaveId { get; set; }
+        public byte SlaveId { get; set; }
         #endregion
 
 
         #region Member functions
-        public static Connection Read(string connectionString)
+        public static Connection Deserialize(string connectionJSON)
         {
-            return JsonSerializer.Deserialize<Connection>(connectionString);
+            return JsonSerializer.Deserialize<Connection>(connectionJSON);
         }
         #endregion
 

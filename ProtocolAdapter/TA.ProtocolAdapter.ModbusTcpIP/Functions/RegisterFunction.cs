@@ -3,32 +3,44 @@ using NModbus.Extensions.Functions;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TA.ProtocolAdapter.ModbusTcpIP.Functions
 {
     class RegisterFunction : RegisterFunctions
     {
-        public static byte[][] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints,
-            IModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
+
+        public static async Task<byte[][]> ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints,
+            IConcurrentModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
         {
             var registerMultiplier = GetRegisterMultiplier(wordSize);
             var registersToRead = (ushort)(numberOfPoints * registerMultiplier);
 
 
-            var values = master.ReadInputRegisters(slaveAddress, startAddress, registersToRead);
+            var values = await master.ReadInputRegistersAsync(slaveAddress, startAddress, registersToRead);
             if (wordSwap) Array.Reverse(values);
             return ConvertRegistersToValues(values, registerMultiplier).Select(endianConverter).ToArray();
         }
 
-        public static byte[][] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints,
-            IModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
+        public static async Task<byte[][]> ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints,
+            IConcurrentModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
         {
             var registerMultiplier = GetRegisterMultiplier(wordSize);
             var registersToRead = (ushort)(numberOfPoints * registerMultiplier);
 
-            var values = master.ReadHoldingRegisters(slaveAddress, startAddress, registersToRead);
+            var values = await master.ReadHoldingRegistersAsync(slaveAddress, startAddress, registersToRead);
             if (wordSwap) Array.Reverse(values);
             return ConvertRegistersToValues(values, registerMultiplier).Select(endianConverter).ToArray();
+        }
+
+
+        public static async void WriteHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints,
+            IConcurrentModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false, ushort[] data = null)
+        {
+            var registerMultiplier = GetRegisterMultiplier(wordSize);
+            var registersToRead = (ushort)(numberOfPoints * registerMultiplier);
+
+            await master.WriteMultipleRegistersAsync(slaveAddress, startAddress,data, registersToRead);
         }
 
         private static byte[][] ConvertRegistersToValues(ushort[] registers, int registerMultiplier)

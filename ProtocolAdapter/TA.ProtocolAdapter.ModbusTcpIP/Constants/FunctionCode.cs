@@ -1,6 +1,6 @@
 ﻿namespace TA.ProtocolAdapter.ModbusTcpIP.Constants
 {
-    class Function
+    class FunctionCode
     {
         public const ushort Coils = 1;
         public const ushort InputStatus = 2;

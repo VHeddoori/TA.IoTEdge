@@ -1,6 +1,6 @@
 ﻿namespace TA.IoTEdge.Common.Entities
 {
-    public class Tag
+    public class TagData
     {
         public int Id { get; set; }
         public int Value { get; set; }
